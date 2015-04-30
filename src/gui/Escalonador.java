@@ -10,6 +10,7 @@ import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -47,6 +48,7 @@ public class Escalonador {
 	 * Create the application.
 	 */
 	public Escalonador() {
+		stack = new Stack();
 		initialize();
 	}
 
@@ -54,14 +56,15 @@ public class Escalonador {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		stack = new Stack();
-
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
+
+		JLabel lblCpu = new JLabel("CPUs: " + stack.getCpus());
+		panel.add(lblCpu);
 
 		JPanel panel_1 = new JPanel();
 		frame.getContentPane().add(panel_1, BorderLayout.WEST);

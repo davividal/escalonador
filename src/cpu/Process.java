@@ -42,7 +42,7 @@ public class Process {
 			this.blocked--;
 
 			return true;
-		} else {
+		} else if (this.status == Status.RUNNING) {
 			if ((new Boolean[]{true, false})[(new Random()).nextInt(2)]) {
 				this.status = Status.BLOCKED;
 

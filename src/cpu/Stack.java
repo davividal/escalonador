@@ -70,6 +70,7 @@ public class Stack {
 	}
 
 	public void run() {
+		this.ran.clear();
 		this.roundProcesses = new Hashtable<Process, Process.Status>();
 
 		this.sortQueue();
@@ -85,19 +86,21 @@ public class Stack {
 		this.createProcesses();
 
 		for (Process process: this.queue) {
-			roundProcesses.putIfAbsent(process, Process.Status.READY);
+			roundProcesses.put(process, Process.Status.READY);
 		}
 
 		for (Process process: this.finished) {
-			roundProcesses.putIfAbsent(process, Process.Status.FINISHED);
+			roundProcesses.put(process, Process.Status.FINISHED);
 		}
 
 		for (Process process: this.ran) {
-			roundProcesses.putIfAbsent(process, Process.Status.RUNNING);
+			roundProcesses.put(process, Process.Status.RUNNING);
 		}
 
 		for (Process process: this.blocked) {
-			roundProcesses.putIfAbsent(process, Process.Status.BLOCKED);
+			if (!roundProcesses.containsKey(process)) {
+				roundProcesses.putIfAbsent(process, Process.Status.BLOCKED);
+			}
 		}
 
 		Iterator<Process> qi = this.queue.iterator();
