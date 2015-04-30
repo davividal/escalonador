@@ -12,7 +12,7 @@ import queue.Queue;
 import queue.RoundRobin;
 import queue.SRT;
 
-public class Stack {
+public class CPU {
 	private static final Integer MAX_PROCESSES = 20;
 	private static final Integer MAX_PROCESSES_ROUND = 5;
 
@@ -22,24 +22,24 @@ public class Stack {
 	protected LinkedList<Process> blocked = new LinkedList<Process>();
 	protected LinkedList<Process> finished = new LinkedList<Process>();
 	protected Hashtable<Process, Process.Status> roundProcesses;
-	protected Integer cpus;
+	protected Integer cores;
 	protected Integer processes = 0;
 	protected Integer round = 1;
 
 	protected Queue[] sorters = {new RoundRobin(), new SRT(), new GreatestPid()};
 
-	public Stack() {
-		this.cpus = (new Integer[]{1,2,4,8})[(new Random()).nextInt(3)];
+	public CPU() {
+		this.cores = (new Integer[]{1,2,4,8})[(new Random()).nextInt(3)];
 	}
 
-	public Integer getCpus() {
-		return this.cpus;
+	public Integer getCores() {
+		return this.cores;
 	}
 
 	protected void createProcesses() {
-		Integer newProcesses = (new Random()).nextInt(Stack.MAX_PROCESSES_ROUND) + 1;
-		for (int i = 0; i < newProcesses && this.processes < Stack.MAX_PROCESSES; i++) {
-			if (this.processes < Stack.MAX_PROCESSES) {
+		Integer newProcesses = (new Random()).nextInt(CPU.MAX_PROCESSES_ROUND) + 1;
+		for (int i = 0; i < newProcesses && this.processes < CPU.MAX_PROCESSES; i++) {
+			if (this.processes < CPU.MAX_PROCESSES) {
 				Process process = new Process(++this.processes, this.round);
 				this.queue.add(process);
 			}
@@ -59,7 +59,7 @@ public class Stack {
 		LinkedList<Process> readyProcesses = new LinkedList<Process>();
 
 		try {
-			for (int i = 0; i < this.cpus; i++) {
+			for (int i = 0; i < this.cores; i++) {
 				readyProcesses.add(this.queue.remove());
 			}
 		} catch (NoSuchElementException ne) {
@@ -98,9 +98,7 @@ public class Stack {
 		}
 
 		for (Process process: this.blocked) {
-			if (!roundProcesses.containsKey(process)) {
-				roundProcesses.putIfAbsent(process, Process.Status.BLOCKED);
-			}
+			roundProcesses.putIfAbsent(process, Process.Status.BLOCKED);
 		}
 
 		Iterator<Process> qi = this.queue.iterator();

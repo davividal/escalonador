@@ -16,12 +16,12 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import cpu.CPU;
 import cpu.Process;
-import cpu.Stack;
 
 
 public class Escalonador {
-	private Stack stack;
+	private CPU cpu;
 	private JFrame frame;
 	private JTable table;
 	private Integer x = 0;
@@ -48,7 +48,7 @@ public class Escalonador {
 	 * Create the application.
 	 */
 	public Escalonador() {
-		stack = new Stack();
+		cpu = new CPU();
 		initialize();
 	}
 
@@ -63,7 +63,7 @@ public class Escalonador {
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 
-		JLabel lblCpu = new JLabel("CPUs: " + stack.getCpus());
+		JLabel lblCpu = new JLabel("Cores: " + cpu.getCores());
 		panel.add(lblCpu);
 
 		JPanel panel_1 = new JPanel();
@@ -83,12 +83,12 @@ public class Escalonador {
 					}
 				}
 
-				stack.run();
+				cpu.run();
 
-				Enumeration<Process> processes = stack.getRoundProcesses().keys();
+				Enumeration<Process> processes = cpu.getRoundProcesses().keys();
 				while (processes.hasMoreElements()) {
 					Process process = processes.nextElement();
-					Process.Status status = stack.getRoundProcesses().get(process);
+					Process.Status status = cpu.getRoundProcesses().get(process);
 
 					processTable.setValueAt(process.getStatus(status), (process.getPid() - 1), x);
 				}
