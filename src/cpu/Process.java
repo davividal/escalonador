@@ -28,6 +28,7 @@ public class Process {
 
 	public Status run() {
 		if (this.isFinished()) {
+			this.setFinished();
 			return Status.FINISHED;
 		}
 
