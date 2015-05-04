@@ -107,4 +107,8 @@ public class Process {
 	public Integer roundsBlocked() {
 		return this.blocked;
 	}
+
+	public Integer getEta() {
+		return this.eta;
+	}
 }
