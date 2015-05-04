@@ -7,10 +7,10 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
-import queue.GreatestPid;
+import queue.LeatestPid;
 import queue.Queue;
 import queue.RoundRobin;
-import queue.SRT;
+import queue.SPF;
 
 public class CPU {
 	private static final Integer MAX_PROCESSES = 20;
@@ -26,7 +26,7 @@ public class CPU {
 	protected Integer processes = 0;
 	protected Integer round = 1;
 
-	protected Queue[] sorters = {new RoundRobin(), new SRT(), new GreatestPid()};
+	protected Queue[] sorters = {new RoundRobin(), new SPF(), new LeatestPid()};
 
 	public CPU() {
 		this.cores = (new Integer[]{1,2,4,8})[(new Random()).nextInt(3)];
