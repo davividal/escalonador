@@ -22,6 +22,7 @@ public class CPU {
 	protected LinkedList<Process> blocked = new LinkedList<Process>();
 	protected LinkedList<Process> finished = new LinkedList<Process>();
 	protected Hashtable<Process, Process.Status> roundProcesses;
+
 	protected Integer cores;
 	protected Integer processes = 0;
 	protected Integer round = 1;
@@ -29,7 +30,8 @@ public class CPU {
 	protected Queue[] sorters = {new RoundRobin(), new SRT(), new GreatestPid()};
 
 	public CPU() {
-		this.cores = (new Integer[]{1,2,4,8})[(new Random()).nextInt(3)];
+		Integer[] cores = new Integer[]{1,2,4,8};
+		this.cores = cores[(new Random()).nextInt(cores.length)];
 	}
 
 	public Integer getCores() {
