@@ -39,11 +39,9 @@ public class Process {
 	}
 
 	public Boolean isBlocked() {
-		if (this.status == Status.BLOCKED && this.blocked > 0) {
-			this.blocked--;
-
+		if (this.status == Status.BLOCKED && --this.blocked > 0) {
 			return true;
-		} else if (this.status == Status.RUNNING) {
+		} else if (this.status == Status.RUNNING && !this.isFinished()) {
 			if ((new Boolean[]{true, false})[(new Random()).nextInt(2)]) {
 				this.status = Status.BLOCKED;
 

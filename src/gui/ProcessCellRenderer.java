@@ -15,17 +15,17 @@ public class ProcessCellRenderer extends DefaultTableCellRenderer {
 		if (value == null) {
 			this.setBackground(Color.WHITE);
 		} else {
-			switch ((String) value) {
-			case "P":
+			switch (((String) value).charAt(0)) {
+			case 'P':
 				this.setBackground(Color.YELLOW);
 				break;
-			case "E":
+			case 'E':
 				this.setBackground(Color.GREEN);
 				break;
-			case "B":
+			case 'B':
 				this.setBackground(Color.RED);
 				break;
-			case "F":
+			case 'F':
 				this.setBackground(Color.BLACK);
 				this.setForeground(Color.WHITE);
 				break;

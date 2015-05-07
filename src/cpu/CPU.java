@@ -18,10 +18,10 @@ public class CPU {
 
 	protected LinkedList<Process> queue = new LinkedList<Process>();
 	protected LinkedList<Process> ready = new LinkedList<Process>();
-	protected LinkedList<Process> ran = new LinkedList<Process>();
 	protected LinkedList<Process> blocked = new LinkedList<Process>();
+	protected LinkedList<Process> unblocked = new LinkedList<Process>();
 	protected LinkedList<Process> finished = new LinkedList<Process>();
-	protected Hashtable<Process, Process.Status> roundProcesses;
+	protected Hashtable<Process, Process.Status> roundProcesses = new Hashtable<Process, Process.Status>();
 
 	protected Integer cores;
 	protected Integer processes = 0;
@@ -46,6 +46,9 @@ public class CPU {
 				this.queue.add(process);
 			}
 		}
+
+		this.queue.addAll(this.unblocked);
+		this.unblocked.clear();
 	}
 
 	// http://www.coderanch.com/t/601882/java/java/Multiple-comparators
@@ -72,8 +75,7 @@ public class CPU {
 	}
 
 	public void run() {
-		this.ran.clear();
-		this.roundProcesses = new Hashtable<Process, Process.Status>();
+		this.roundProcesses.clear();
 
 		this.sortQueue();
 
@@ -81,22 +83,17 @@ public class CPU {
 			process.run();
 			this.ready.remove(process);
 			this.queue.add(process);
-			this.ran.add(process);
 			roundProcesses.put(process, Process.Status.RUNNING);
 		}
 
 		this.createProcesses();
 
 		for (Process process: this.queue) {
-			roundProcesses.put(process, Process.Status.READY);
+			roundProcesses.putIfAbsent(process, Process.Status.READY);
 		}
 
 		for (Process process: this.finished) {
-			roundProcesses.put(process, Process.Status.FINISHED);
-		}
-
-		for (Process process: this.ran) {
-			roundProcesses.put(process, Process.Status.RUNNING);
+			roundProcesses.putIfAbsent(process, Process.Status.FINISHED);
 		}
 
 		for (Process process: this.blocked) {
@@ -130,7 +127,7 @@ public class CPU {
 				process.setReady();
 
 				bi.remove();
-				this.queue.add(process);
+				this.unblocked.add(process);
 			}
 		}
 	}
@@ -161,5 +158,14 @@ public class CPU {
 
 	public Hashtable<Process, Process.Status> getRoundProcesses() {
 		return this.roundProcesses;
+	}
+
+	public Boolean isFinished() {
+		Object[] statuses = this.roundProcesses.values().stream().distinct().toArray();
+		if (statuses.length == 1) {
+			return statuses[0] == Process.Status.FINISHED;
+		}
+
+		return false;
 	}
 }
